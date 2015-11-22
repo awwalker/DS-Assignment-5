@@ -2,7 +2,7 @@
  * This interface defines the methods that 
  * must be implemented in any class that 
  * uses it. 
- * @author aaronwalker
+ * @author Aaron Walker
  *
  * @param <E>
  */

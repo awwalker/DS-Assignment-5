@@ -1,6 +1,9 @@
-package proj2;
-
 import java.util.ArrayList;
+/**
+ * This interface defines methods needed
+ * to be implemented in the LetterBag class
+ * @author Joanna Klukowska
+ */
 
 public interface LetterBagInterface {
 	
