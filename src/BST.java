@@ -87,22 +87,39 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E> {
 	
 	private class BSTNode <T extends Comparable <T> >
 					implements Comparable < BSTNode<T> >{
+		
 		private T data;
 		private BSTNode <T> left;
 		private BSTNode <T> right;
+		private int height;
 		
 		public BSTNode ( T data ){
 			this.data = data;
+			this.left = null;
+			this.right = null;
+			this.height = 1;
 		}
 		
-		public BSTNode ( T data, BSTNode <T> left, BSTNode <T> right ){
-			this.data = data;
-			this.left = left;
-			this.right = right;
+		private int max (int a, int b){
+			return ( a > b ) ? a : b; 
 		}
 		
 		public int compareTo ( BSTNode <T> other){
 			return this.data.compareTo(other.data);
+		}
+		
+		public int getHeight ( BSTNode<T> N){
+			if ( N == null ){
+				return 0;
+			}
+			return N.height;
+		}
+		
+		private int getBalance ( BSTNode<T> N){
+			if ( N == null ){
+				return 0;
+			}
+			return getHeight(N.left) - getHeight(N.right);
 		}
 	}
 }
