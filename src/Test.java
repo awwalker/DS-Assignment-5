@@ -9,6 +9,6 @@ public class Test extends BST<Integer> {
 	public static void main ( String[] args ){
 		BST<Integer> nums = new BST<Integer>();
 		
-		System.out.println(nums.toString());
+		
 	}
 }
