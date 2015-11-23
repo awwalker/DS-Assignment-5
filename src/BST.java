@@ -4,7 +4,7 @@
  * @author Aaron Walker
  *
  */
-public class BST<E extends Comparable <E> > implements BSTInterface<E> {
+public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 	private BSTNode<E> root;
 	
 	public BST(){
@@ -26,9 +26,31 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E> {
 		else{
 			node.right = recInsert ( node.right, newData );
 		}
+		node.height = node.max( node.getHeight( node.left ), node.getHeight( node.right ) ) + 1;
+		
+		int balance = node.getBalance( node );
+		
+		if( balance > 1 && newData.compareTo( node.left.data ) < 0 ){
+			return node.rightRotate( node );
+		}
+		if( balance < -1 && newData.compareTo( node.right.data ) > 0 ){
+			return node.leftRotate( node );
+		}
+		if( balance > 1 && newData.compareTo( node.left.data ) > 0 ){
+			node.left = node.leftRotate( node.left );
+			return node.rightRotate( node );
+		}
+		if( balance < -1 && newData.compareTo( node.right.data ) < 0 ){
+			node.right = node.rightRotate( node.right );
+			return node.leftRotate( node );
+		}
+		
 		return node;
+		
+		
 	}
 	
+
 	public void remove ( E item ){
 		
 	}
@@ -51,75 +73,70 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E> {
 		return recSize(root);
 	}
 	
-	private <T extends Comparable <T>> void recInOrderTraverse (BSTNode <T> root){
-		if ( root != null ){
-			recInOrderTraverse( root.left );
-			System.out.println( root.data );
-			recInOrderTraverse( root.right );
-		}
+	
+	@SuppressWarnings("hiding")
+	protected class BSTNode <E extends Comparable <E> > {
 		
-	}
-	
-	private <T extends Comparable <T>> void recPostOrderTraverse (BSTNode <T> root){
-		if ( root != null ){
-			recPostOrderTraverse( root.left );
-			recPostOrderTraverse( root.right );
-			System.out.println( root.data );
-		}
-	}
-	
-	private <T extends Comparable<T>> void recPreOrderTraverse (BSTNode <T> root){
-		if ( root != null ){
-			System.out.println( root.data );
-			recPreOrderTraverse( root.left );
-			recPreOrderTraverse( root.right);	
-		}
-	}
-	@Override
-	public String toString(){
-		recInOrderTraverse(root);
-		System.out.println("\n");
-		recPostOrderTraverse(root);
-		System.out.println("\n");
-		recPreOrderTraverse(root);
-		return "";
-	}
-	
-	private class BSTNode <T extends Comparable <T> >
-					implements Comparable < BSTNode<T> >{
-		
-		private T data;
-		private BSTNode <T> left;
-		private BSTNode <T> right;
+		private E data;
+		private BSTNode <E> left;
+		private BSTNode <E> right;
 		private int height;
 		
-		public BSTNode ( T data ){
+		public BSTNode ( E data ){
 			this.data = data;
 			this.left = null;
 			this.right = null;
 			this.height = 1;
 		}
 		
-		private int max (int a, int b){
+		public int max (int a, int b){
 			return ( a > b ) ? a : b; 
 		}
 		
-		public int compareTo ( BSTNode <T> other){
+		public int compareTo ( BSTNode <E> other){
 			return this.data.compareTo(other.data);
 		}
 		
-		public int getHeight ( BSTNode<T> N){
-			if ( N == null ){
+		public int getHeight ( BSTNode<E> node){
+			if ( node == null ){
 				return 0;
 			}
-			return N.height;
+			return node.height;
 		}
 		
-		private int getBalance ( BSTNode<T> N){
-			if ( N == null ){
+		public int getBalance ( BSTNode<E> node){
+			if ( node == null ){
 				return 0;
 			}
-			return getHeight(N.left) - getHeight(N.right);
+			return getHeight( node.left ) - getHeight( node.right );
+		}
+		
+		private BSTNode<E> rightRotate( BSTNode<E> node){
+			//temporary for rotation
+			BSTNode<E> subLeft = node.left;
+			BSTNode<E> subLeftRight = subLeft.right;
+			//perform rotation
+			subLeft.right = node;
+			node.left = subLeftRight;
+			//update heights
+			node.height = max( getHeight( node.left ), getHeight( node.right ) ) + 1;
+			subLeft.height = max( getHeight( subLeft.left ), getHeight( subLeft.right ) ) + 1;
+			
+			return subLeft; //new root
+		}
+		
+		private BSTNode<E> leftRotate( BSTNode<E> node){
+			BSTNode<E> subRight = node.right;
+			BSTNode<E> subRightLeft = subRight.left;
+			
+			subRight.left = node;
+			node.right = subRightLeft;
+			
+			node.height = max( getHeight( node.left ), getHeight( node.right ) ) + 1;
+			subRight.height = max( getHeight( subRight.left ), getHeight( subRight.right ) ) + 1;
+			
+			return subRight;
 		}
 	}
+	
 }
