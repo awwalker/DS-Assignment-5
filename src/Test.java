@@ -8,7 +8,12 @@
 public class Test extends BST<Integer> {
 	public static void main ( String[] args ){
 		BST<Integer> nums = new BST<Integer>();
+		Integer[] toAdd = {2,4,7};
+		for(int num : toAdd){
+			nums.insert(num);
+		}
 		
-		
+		System.out.println(nums.toStringTreeFormat());
+	
 	}
 }
