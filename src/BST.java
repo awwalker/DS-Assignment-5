@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * This class implements a binary search tree.
  * All of its methods are implemented recursively
@@ -5,11 +7,18 @@
  *
  */
 public class BST<E extends Comparable <E> > implements BSTInterface<E>{
-	private BSTNode<E> root;
+	protected BSTNode<E> root;
+	protected int size;
 	
 	public BST(){
 		this.root = null;
+		this.size = 0;
 	}
+	
+	public int getSize(){
+		return size;
+	}
+	
 	public int getHeight ( BSTNode<E> node){
 		if ( node == null ){
 			return 0;
@@ -88,19 +97,23 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		return subRightLeft;
 	}
 	
-	public void insert ( E item ){
-		root = insert ( root, item);
+	public void insert ( E data ){
+		if( data != null ){
+			root = insert ( root, data);
+			size++;
+		}
+		
 	}
 	
-	private BSTNode<E> insert ( BSTNode<E> node, E newData ){
+	private BSTNode<E> insert ( BSTNode<E> node, E data ){
 		if ( node == null ){
-			node = new BSTNode<E>( newData, null, null );
+			node = new BSTNode<E>( data, null, null );
 		}
-		else if ( newData.compareTo(node.data) < 0 ){
-			node.left = insert ( node.left, newData );
+		else if ( data.compareTo(node.data) < 0 ){
+			node.left = insert ( node.left, data );
 		}
 		else{
-			node.right = insert ( node.right, newData );
+			node.right = insert ( node.right, data );
 		}
 		
 		updateHeight(node);
@@ -112,6 +125,7 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 	public void remove ( E data ){
 		if( data != null ){
 			root = remove( data, root );
+			size--;
 		}
 	}
 	
@@ -212,6 +226,22 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 	 * @param output the string that accumulated the string representation
 	 * of this BST
 	 */
+	
+	public ArrayList<E> inOrderArray(){
+		ArrayList<E> treeArray = new ArrayList<E>();
+		return inOrderArray( root, treeArray  );
+	}
+	private ArrayList<E> inOrderArray( BSTNode<E> node, ArrayList<E> treeArray){
+
+		
+		if( node != null ){
+			inOrderArray( node.left, treeArray );
+			treeArray.add( node.data );
+			inOrderArray( node.right, treeArray );
+		}
+		
+		return treeArray;
+	}
 	private void postOrderPrint(BSTNode<E> tree, int level, StringBuilder output)
 	{
 		if (tree != null) {
@@ -285,10 +315,10 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 	@SuppressWarnings("hiding")
 	protected class BSTNode <E extends Comparable <E> > {
 		
-		protected E data;
-		protected BSTNode <E> left;
-		protected BSTNode <E> right;
-		protected int height;
+		private E data;
+		private BSTNode <E> left;
+		private BSTNode <E> right;
+		private int height;
 		
 		public BSTNode ( E data ){
 			this(data, null, null);
@@ -316,6 +346,17 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 			return this.data.compareTo(other.data);
 		}
 		
+		public E getData(){
+			return this.data;
+		}
+		
+		public BSTNode<E> getLeft(){
+			return this.left;
+		}
+		
+		public BSTNode<E> getRight(){
+			return this.right;
+		}
 	}
 	
 }
