@@ -9,18 +9,18 @@ import java.util.ArrayList;
  * @author Joanna Klukowska
  *
  */
-public class Dictionary implements DictionaryInterface{
+public class Dictionary extends BST<String> implements DictionaryInterface{
 	//actual storage for the words
-	private ArrayList < String > words;
-	
-	
+	private BST< String > words;
+
+
 	/**
 	 * Creates an empty Dictionary object (no words).
 	 */
 	public Dictionary ( ) {
-		words = new ArrayList < String > () ;
+		words = new BST < String > () ;
 	}
-	
+
 	/**
 	 * Creates a Dictionary object containing all words from the 
 	 * listOfWords passed as a parameter.
@@ -29,12 +29,13 @@ public class Dictionary implements DictionaryInterface{
 	 * Dictionary object
 	 */
 	public Dictionary ( ArrayList < String > listOfWords ) {
-		words = listOfWords;
-		if (null == words) {
-			words = new ArrayList <String> ();
+		words = new BST < String > ();
+
+		for( String word : listOfWords ){
+			words.insert(word);
 		}
 	}
-	
+
 	/**
 	 * Creates a new Dictionary object from this Dictionary object that 
 	 * contains words of a specified size.
@@ -44,82 +45,60 @@ public class Dictionary implements DictionaryInterface{
 	 * size
 	 */
 	public Dictionary getWordsBySize ( int size ) {
-		ArrayList <String> wordsBySize = new ArrayList<String> ();
-		for (int i = 0; i < words.size(); i++)
-			if (words.get(i).length() == size)
-				wordsBySize.add(words.get(i));
+		ArrayList<String> allWords = words.inOrderArray();
+		ArrayList<String> wordsBySize = new ArrayList<String>();
+
+		for ( int i = 0; i < allWords.size(); i++ ){
+			if( allWords.get(i).length() == size ){
+				wordsBySize.add(allWords.get(i));
+			}
+		}
+
 		return new Dictionary (wordsBySize);
 	}
-	
-	 
-	/**
-	 * Performs (binary) search in this Dictionary object for a given word.
-	 * @param word  the word to look for in this Dictionary object. 
-	 * @return true if the word is in this Dictionary object, false otherwise
-	 */
-	public boolean findWord ( String word ) {
-		return isWordInDictionaryRecursive( word, 0, words.size() - 1 );
-	}
-	
-	/**
-	 * The actual method providing recursive implementation of the binary search.
-	 * @param word the word to look for in this Dictionary object
-	 * @param begin start of the range for the current iteration
-	 * @param end   end of the range for the current iteration
-	 * @return  true if the word is in this Dictionary object, false otherwise
-	 */
-	private boolean isWordInDictionaryRecursive ( String word, int begin, int end ) {
-		if (begin > end )
-			return false;
-		
-		int half = (begin+end+1) / 2;
-		int comparison = words.get(half).compareToIgnoreCase(word);
-		
-		if ( comparison < 0 )
-			return isWordInDictionaryRecursive( word, half + 1, end );
-		else if ( comparison > 0 )
-			return isWordInDictionaryRecursive( word, begin, half - 1);
-		else
-			return true;
-	}
-	
-	/**
-	 * Performs (binary) search in this Dictionary object for a given prefix.
-	 * @param prefix  the prefix to look for in this Dictionary object. 
-	 * @return true if at least one word with the specified prefix exists 
-	 * in this Dictionary object, false otherwise
-	 */
-	public boolean findPrefix (String prefix ) {
-		return isPrefixInDictionaryRecursive (prefix, 0, words.size() - 1 );
-	}
+
 
 	/**
-	 * The actual method providing recursive implementation of the binary search
-	 * for the prefix. 
-	 * @param prefix the prefix to look for in this Dictionary object.
-	 * @param begin start of the range for the current iteration
-	 * @param end end of the range for the current iteration
-	 * @return true if at least one word with the specified prefix exists 
-	 * in this Dictionary object, false otherwise
+	 * 
 	 */
-	private boolean isPrefixInDictionaryRecursive(String prefix, int begin, int end) {
-		if (begin > end )
-			return false;
-				
-		int half = (begin+end+1) / 2;
-		int comparison = words.get(half).compareToIgnoreCase(prefix);
-		boolean isPrefix = words.get(half).startsWith(prefix);
-		if (isPrefix) 
-			return true;
-		
-		if (comparison < 0 )
-			return isPrefixInDictionaryRecursive( prefix, half + 1, end );
-		else if ( comparison > 0 )
-			return isPrefixInDictionaryRecursive( prefix, begin, half - 1);
-		else  //this case should never happen
-			return true;
+	public boolean findWord ( String word ) {
+		return words.contains(word);
 	}
-	
-	
-	
+
+	public boolean findPrefix ( String prefix ){
+		return findPrefix(prefix, words.root);
+	}
+	/**
+	 * 
+	 */
+
+	private boolean findPrefix (String prefix, BSTNode<String> node ) {
+		
+		if( node == null ){
+			return false;
+		}
+		else{
+			String nodePrefix = node.getData().substring(0, prefix.length() );
+			if( prefix.equals(( nodePrefix )) ){
+				return true;
+			}
+
+			else if( prefix.compareTo( nodePrefix )  < 0 ){
+				return findPrefix( prefix, node.getLeft() );
+			}
+
+			else if( prefix.compareTo( nodePrefix ) > 0 ){
+				return findPrefix( prefix, node.getRight() );
+			}
+			return true;
+		}
+	}	
+
+	public String toString(){
+		StringBuilder b = new StringBuilder();
+		for( int i = 0; i < words.inOrderArray().size(); i++ ){
+			b.append(words.inOrderArray().get(i) + " ");
+		}
+		return b.toString();
+	}
 }
