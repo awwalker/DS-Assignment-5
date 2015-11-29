@@ -6,11 +6,11 @@ import java.util.ArrayList;
  * @author Aaron Walker
  *
  */
-public class BST<E extends Comparable <E> > implements BSTInterface<E>{
-	protected BSTNode<E> root;
+public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
+	protected AVLNode<E> root;
 	protected int size;
 	
-	public BST(){
+	public AVLTree(){
 		this.root = null;
 		this.size = 0;
 	}
@@ -19,14 +19,14 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		return size;
 	}
 	
-	public int getHeight ( BSTNode<E> node){
+	public int getHeight ( AVLNode<E> node){
 		if ( node == null ){
 			return 0;
 		}
 		return node.height;
 	}
 	
-	public int getBalance ( BSTNode<E> node){
+	public int getBalance ( AVLNode<E> node){
 		if ( node.right == null ){
 			return -node.height;
 		}
@@ -36,9 +36,9 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		return node.right.height - node.left.height;
 	}
 	
-	private BSTNode<E> leftRotate( BSTNode<E> node){//deal with LL Imbalance
+	private AVLNode<E> leftRotate( AVLNode<E> node){//deal with LL Imbalance
 		//temporary for rotation
-		BSTNode<E> subLeft = node.left;
+		AVLNode<E> subLeft = node.left;
 		//perform rotation
 		
 		node.left = subLeft.right;
@@ -50,9 +50,9 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		return subLeft; //new root
 	}
 	
-	private BSTNode<E> rightRotate( BSTNode<E> node){//deal with RR Imbalance
+	private AVLNode<E> rightRotate( AVLNode<E> node){//deal with RR Imbalance
 		//temporary for rotation
-		BSTNode<E> subRight = node.right;
+		AVLNode<E> subRight = node.right;
 		
 		//perform rotation
 		node.right = subRight.left;
@@ -65,9 +65,9 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		return subRight; //new root
 	}
 	
-	private BSTNode<E> leftRightRotate( BSTNode<E> node){
-		BSTNode<E> subLeft = node.left;
-		BSTNode<E> subLeftRight = subLeft.right;
+	private AVLNode<E> leftRightRotate( AVLNode<E> node){
+		AVLNode<E> subLeft = node.left;
+		AVLNode<E> subLeftRight = subLeft.right;
 		
 		node.left = subLeftRight.right;
 		subLeft.right = subLeftRight.left;
@@ -81,9 +81,9 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		return subLeftRight;
 	}
 	
-	private BSTNode<E> rightLeftRotate( BSTNode<E> node){
-		BSTNode<E> subRight = node.right;
-		BSTNode<E> subRightLeft = subRight.left;
+	private AVLNode<E> rightLeftRotate( AVLNode<E> node){
+		AVLNode<E> subRight = node.right;
+		AVLNode<E> subRightLeft = subRight.left;
 		
 		node.right = subRightLeft.left;
 		subRight.left = subRightLeft.right;
@@ -105,9 +105,9 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		
 	}
 	
-	private BSTNode<E> insert ( BSTNode<E> node, E data ){
+	private AVLNode<E> insert ( AVLNode<E> node, E data ){
 		if ( node == null ){
-			node = new BSTNode<E>( data, null, null );
+			node = new AVLNode<E>( data, null, null );
 		}
 		else if ( data.compareTo(node.data) < 0 ){
 			node.left = insert ( node.left, data );
@@ -129,7 +129,7 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		}
 	}
 	
-	private BSTNode<E> remove( E data, BSTNode<E> node ){
+	private AVLNode<E> remove( E data, AVLNode<E> node ){
 		if( node == null ){
 			;
 		}
@@ -167,10 +167,10 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 
 	}
 
-	private BSTNode<E> balance( BSTNode<E> node){
+	private AVLNode<E> balance( AVLNode<E> node){
 		
 		if( getBalance(node) == -2){
-			BSTNode<E> t = tallerSub(node.left, node.right);
+			AVLNode<E> t = tallerSub(node.left, node.right);
 			if(getBalance(t) == -1 || getBalance(t) == 0){
 				node = leftRotate(node);
 			}
@@ -179,7 +179,7 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 			}
 		}
 		if( getBalance( node ) == 2){
-			BSTNode<E> t = tallerSub(node.left, node.right);
+			AVLNode<E> t = tallerSub(node.left, node.right);
 			if(getBalance(t) == 0 || getBalance(t) == 1){
 				node = rightRotate(node);
 			}
@@ -190,7 +190,7 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		return node;
 	}
 	
-	private BSTNode<E> tallerSub( BSTNode<E> left, BSTNode<E> right){
+	private AVLNode<E> tallerSub( AVLNode<E> left, AVLNode<E> right){
 		if( left == null ){
 			return right;
 		}
@@ -205,7 +205,7 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		}
 	}
 	
-	private void updateHeight(BSTNode<E> node){
+	private void updateHeight(AVLNode<E> node){
 		if(node.left == null && node.right == null){
 			node.height = 0;
 		}
@@ -231,7 +231,7 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		ArrayList<E> treeArray = new ArrayList<E>();
 		return inOrderArray( root, treeArray  );
 	}
-	private ArrayList<E> inOrderArray( BSTNode<E> node, ArrayList<E> treeArray){
+	private ArrayList<E> inOrderArray( AVLNode<E> node, ArrayList<E> treeArray){
 
 		
 		if( node != null ){
@@ -242,7 +242,7 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		
 		return treeArray;
 	}
-	private void postOrderPrint(BSTNode<E> tree, int level, StringBuilder output)
+	private void postOrderPrint(AVLNode<E> tree, int level, StringBuilder output)
 	{
 		if (tree != null) {
 			String spaces = "\n";
@@ -280,7 +280,7 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		return s.toString();
 	}
 	
-	private E getPredecessor( BSTNode<E> node ){
+	private E getPredecessor( AVLNode<E> node ){
 		while( node.right != null ){
 			node = node.right;
 		}
@@ -294,7 +294,7 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 		return false;
 	}
 	
-	private boolean contains( E data, BSTNode<E> node){
+	private boolean contains( E data, AVLNode<E> node){
 		//should just be like a binary search
 		//reached end of tree and never found it
 		if( node == null ){
@@ -313,18 +313,18 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 	}
 	
 	@SuppressWarnings("hiding")
-	protected class BSTNode <E extends Comparable <E> > {
+	protected class AVLNode <E extends Comparable <E> > {
 		
 		private E data;
-		private BSTNode <E> left;
-		private BSTNode <E> right;
+		private AVLNode <E> left;
+		private AVLNode <E> right;
 		private int height;
 		
-		public BSTNode ( E data ){
+		public AVLNode ( E data ){
 			this(data, null, null);
 		}
 		
-		public BSTNode ( E data, BSTNode<E> left, BSTNode<E> right){
+		public AVLNode ( E data, AVLNode<E> left, AVLNode<E> right){
 			this.data = data;
 			this.left = left;
 			this.right = right;
@@ -342,7 +342,7 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 			}
 		}
 		
-		public int compareTo ( BSTNode <E> other){
+		public int compareTo ( AVLNode <E> other){
 			return this.data.compareTo(other.data);
 		}
 		
@@ -350,11 +350,11 @@ public class BST<E extends Comparable <E> > implements BSTInterface<E>{
 			return this.data;
 		}
 		
-		public BSTNode<E> getLeft(){
+		public AVLNode<E> getLeft(){
 			return this.left;
 		}
 		
-		public BSTNode<E> getRight(){
+		public AVLNode<E> getRight(){
 			return this.right;
 		}
 	}

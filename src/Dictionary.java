@@ -9,16 +9,16 @@ import java.util.ArrayList;
  * @author Joanna Klukowska
  *
  */
-public class Dictionary extends BST<String> implements DictionaryInterface{
+public class Dictionary extends AVLTree<String> implements DictionaryInterface{
 	//actual storage for the words
-	private BST< String > words;
+	private AVLTree< String > words;
 
 
 	/**
 	 * Creates an empty Dictionary object (no words).
 	 */
 	public Dictionary ( ) {
-		words = new BST < String > () ;
+		words = new AVLTree < String > () ;
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class Dictionary extends BST<String> implements DictionaryInterface{
 	 * Dictionary object
 	 */
 	public Dictionary ( ArrayList < String > listOfWords ) {
-		words = new BST < String > ();
+		words = new AVLTree < String > ();
 
 		for( String word : listOfWords ){
 			words.insert(word);
@@ -72,7 +72,7 @@ public class Dictionary extends BST<String> implements DictionaryInterface{
 	 * 
 	 */
 
-	private boolean findPrefix (String prefix, BSTNode<String> node ) {
+	private boolean findPrefix (String prefix, AVLNode<String> node ) {
 		
 		if( node == null ){
 			return false;
