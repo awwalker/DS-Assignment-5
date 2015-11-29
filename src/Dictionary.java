@@ -78,16 +78,16 @@ public class Dictionary extends BST<String> implements DictionaryInterface{
 			return false;
 		}
 		else{
-			String nodePrefix = node.getData().substring(0, prefix.length() );
-			if( prefix.equals(( nodePrefix )) ){
+			
+			if(node.getData().startsWith(( prefix )) ){
 				return true;
 			}
 
-			else if( prefix.compareTo( nodePrefix )  < 0 ){
+			else if( prefix.compareTo( node.getData() )  < 0 ){
 				return findPrefix( prefix, node.getLeft() );
 			}
 
-			else if( prefix.compareTo( nodePrefix ) > 0 ){
+			else if( prefix.compareTo( node.getData() ) > 0 ){
 				return findPrefix( prefix, node.getRight() );
 			}
 			return true;
