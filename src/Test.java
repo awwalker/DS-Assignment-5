@@ -46,9 +46,7 @@ public class Test extends BST<Integer> {
 		}
 		//create dictionary object
 		Dictionary dict = new Dictionary(dictWords);
-		System.out.println(dict.toString());
-		System.out.println(dict.findWord("cat"));
-		System.out.println(dict.findPrefix("ca"));
+		
 
 		//prompt user for letters to be used
 		System.out.printf("Enter letters (3-1000) to be used. Do not use spaces "
