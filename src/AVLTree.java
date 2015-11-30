@@ -138,7 +138,7 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 			updateHeight( node );
 			return balance( node );
 		}
-		else if ( data.compareTo( node.data ) > 0 ){
+		else if( data.compareTo( node.data ) > 0 ){
 			node.right = remove( data, node.right );
 			updateHeight( node );
 			return balance( node );
@@ -205,14 +205,14 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		}
 	}
 	
-	private void updateHeight(AVLNode<E> node ){
-		if(node.left == null && node.right == null ){
+	private void updateHeight( AVLNode<E> node ){
+		if( node.left == null && node.right == null ){
 			node.height = 0;
 		}
-		else if(node.left == null ){
+		else if( node.left == null ){
 			node.height = node.right.height + 1;
 		}
-		else if(node.right == null ){
+		else if( node.right == null ){
 			node.height = node.left.height + 1;
 		}
 		else{
@@ -220,43 +220,29 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		}
 	}
 	
-	public ArrayList<E> inOrderArray(){
-		ArrayList<E> treeArray = new ArrayList<E>();
-		return inOrderArray( root, treeArray  );
-	}
-	
-	private ArrayList<E> inOrderArray( AVLNode<E> node, ArrayList<E> treeArray){
 
-		
-		if( node != null ){
-			inOrderArray( node.left, treeArray );
-			treeArray.add( node.data );
-			inOrderArray( node.right, treeArray );
-		}
-		
-		return treeArray;
-	}
-	
 	/**
 	 * @param tree the root of the current subtree
 	 * @param level level (depth) of the current recursive call in the tree
 	 * to determine the indentation of each item 
 	 * @param output the string that accumulated the string representation
 	 * of this BST
+	 * 
+	 * @author Joanna Klukowska
 	 */
 	private void postOrderPrint(AVLNode<E> tree, int level, StringBuilder output)
 	{
 		if (tree != null) {
 			String spaces = "\n";
-			if (level > 0) {
-				for (int i = 0; i < level - 1; i++)
+			if ( level > 0 ) {
+				for( int i = 0; i < level - 1; i++ )
 					spaces += "   ";
 				spaces += "|--";
 			}
-			output.append(spaces);
-			output.append(tree.data);
-			postOrderPrint(tree.left, level + 1, output);
-			postOrderPrint(tree.right, level + 1, output);
+			output.append( spaces );
+			output.append( tree.data );
+			postOrderPrint( tree.left, level + 1, output );
+			postOrderPrint( tree.right, level + 1, output );
 		}
 		//uncomment the part below to show "null children" in the output 
 //		else {
