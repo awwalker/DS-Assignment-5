@@ -10,7 +10,7 @@ import java.util.Scanner;
  * @author Aaron Walker
  *
  */
-public class Test extends BST<Integer> {
+public class Test extends AVLTree<Integer> {
 
 	public static void main ( String[] args ){
 		

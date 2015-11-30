@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * @author Aaron Walker
  *
  */
-public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
+public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 	protected AVLNode<E> root;
 	protected int size;
 	
@@ -19,14 +19,14 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 		return size;
 	}
 	
-	public int getHeight ( AVLNode<E> node){
+	public int getHeight ( AVLNode<E> node ){
 		if ( node == null ){
 			return 0;
 		}
 		return node.height;
 	}
 	
-	public int getBalance ( AVLNode<E> node){
+	public int getBalance ( AVLNode<E> node ){
 		if ( node.right == null ){
 			return -node.height;
 		}
@@ -36,7 +36,7 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 		return node.right.height - node.left.height;
 	}
 	
-	private AVLNode<E> leftRotate( AVLNode<E> node){//deal with LL Imbalance
+	private AVLNode<E> leftRotate( AVLNode<E> node ){//deal with LL Imbalance
 		//temporary for rotation
 		AVLNode<E> subLeft = node.left;
 		//perform rotation
@@ -44,13 +44,13 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 		node.left = subLeft.right;
 		subLeft.right = node;
 		
-		updateHeight(node);
-		updateHeight(subLeft);
+		updateHeight( node );
+		updateHeight( subLeft );
 		
 		return subLeft; //new root
 	}
 	
-	private AVLNode<E> rightRotate( AVLNode<E> node){//deal with RR Imbalance
+	private AVLNode<E> rightRotate( AVLNode<E> node ){//deal with RR Imbalance
 		//temporary for rotation
 		AVLNode<E> subRight = node.right;
 		
@@ -59,13 +59,13 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 		subRight.left = node;
 		
 		//update heights
-		updateHeight(node);
-		updateHeight(subRight);
+		updateHeight( node );
+		updateHeight( subRight );
 		
 		return subRight; //new root
 	}
 	
-	private AVLNode<E> leftRightRotate( AVLNode<E> node){
+	private AVLNode<E> leftRightRotate( AVLNode<E> node ){
 		AVLNode<E> subLeft = node.left;
 		AVLNode<E> subLeftRight = subLeft.right;
 		
@@ -74,14 +74,14 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 		subLeftRight.left = subLeft;
 		subLeftRight.right = node;
 		
-		updateHeight(node);
-		updateHeight(subLeft);
-		updateHeight(subLeftRight);
+		updateHeight( node );
+		updateHeight( subLeft );
+		updateHeight( subLeftRight );
 		
 		return subLeftRight;
 	}
 	
-	private AVLNode<E> rightLeftRotate( AVLNode<E> node){
+	private AVLNode<E> rightLeftRotate( AVLNode<E> node ){
 		AVLNode<E> subRight = node.right;
 		AVLNode<E> subRightLeft = subRight.left;
 		
@@ -90,16 +90,16 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 		subRightLeft.right = subRight;
 		subRightLeft.left = node;
 		
-		updateHeight(node);
-		updateHeight(subRight);
-		updateHeight(subRightLeft);
+		updateHeight( node );
+		updateHeight( subRight );
+		updateHeight( subRightLeft );
 		
 		return subRightLeft;
 	}
 	
 	public void insert ( E data ){
 		if( data != null ){
-			root = insert ( root, data);
+			root = insert ( root, data );
 			size++;
 		}
 		
@@ -116,8 +116,8 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 			node.right = insert ( node.right, data );
 		}
 		
-		updateHeight(node);
-		node = balance(node);
+		updateHeight( node );
+		node = balance( node );
 		return node;
 		
 	}
@@ -135,13 +135,13 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 		}
 		if( data.compareTo( node.data ) < 0 ){
 			node.left = remove( data, node.left );
-			updateHeight(node);
-			return balance(node);
+			updateHeight( node );
+			return balance( node );
 		}
 		else if ( data.compareTo( node.data ) > 0 ){
 			node.right = remove( data, node.right );
-			updateHeight(node);
-			return balance(node);
+			updateHeight( node );
+			return balance( node );
 		}
 		else{
 			if( node.left == null && node.right == null ){
@@ -157,40 +157,40 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 			}
 			
 			else{
-				E predValue = getPredecessor(node.left);
+				E predValue = getPredecessor( node.left );
 				node.data = predValue;
 				node.left = remove( predValue, node.left );
-				updateHeight(node);
-				return balance(node);
+				updateHeight( node );
+				return balance( node );
 			}
 		}
 
 	}
 
-	private AVLNode<E> balance( AVLNode<E> node){
+	private AVLNode<E> balance( AVLNode<E> node ){
 		
-		if( getBalance(node) == -2){
-			AVLNode<E> t = tallerSub(node.left, node.right);
-			if(getBalance(t) == -1 || getBalance(t) == 0){
-				node = leftRotate(node);
+		if( getBalance(node) == -2 ){
+			AVLNode<E> t = tallerSub( node.left, node.right );
+			if( getBalance(t) <= 0 ){
+				node = leftRotate( node );
 			}
 			else if (getBalance(t)== 1){
-				node = leftRightRotate(node);
+				node = leftRightRotate( node );
 			}
 		}
 		if( getBalance( node ) == 2){
-			AVLNode<E> t = tallerSub(node.left, node.right);
-			if(getBalance(t) == 0 || getBalance(t) == 1){
-				node = rightRotate(node);
+			AVLNode<E> t = tallerSub( node.left, node.right );
+			if( getBalance(t) >= 1 ){
+				node = rightRotate( node );
 			}
-			else if(getBalance(t)== -1 ){
-				node = rightLeftRotate(node);
+			else if( getBalance(t)== -1 ){
+				node = rightLeftRotate( node );
 			}
 		}
 		return node;
 	}
 	
-	private AVLNode<E> tallerSub( AVLNode<E> left, AVLNode<E> right){
+	private AVLNode<E> tallerSub( AVLNode<E> left, AVLNode<E> right ){
 		if( left == null ){
 			return right;
 		}
@@ -205,32 +205,26 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 		}
 	}
 	
-	private void updateHeight(AVLNode<E> node){
-		if(node.left == null && node.right == null){
+	private void updateHeight(AVLNode<E> node ){
+		if(node.left == null && node.right == null ){
 			node.height = 0;
 		}
-		else if(node.left == null){
+		else if(node.left == null ){
 			node.height = node.right.height + 1;
 		}
-		else if(node.right == null){
+		else if(node.right == null ){
 			node.height = node.left.height + 1;
 		}
 		else{
-			node.height = Math.max(node.left.height, node.right.height) + 1;
+			node.height = Math.max( node.left.height, node.right.height ) + 1;
 		}
 	}
-	/*
-	 * @param tree the root of the current subtree
-	 * @param level level (depth) of the current recursive call in the tree
-	 * to determine the indentation of each item 
-	 * @param output the string that accumulated the string representation
-	 * of this BST
-	 */
 	
 	public ArrayList<E> inOrderArray(){
 		ArrayList<E> treeArray = new ArrayList<E>();
 		return inOrderArray( root, treeArray  );
 	}
+	
 	private ArrayList<E> inOrderArray( AVLNode<E> node, ArrayList<E> treeArray){
 
 		
@@ -242,6 +236,14 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 		
 		return treeArray;
 	}
+	
+	/**
+	 * @param tree the root of the current subtree
+	 * @param level level (depth) of the current recursive call in the tree
+	 * to determine the indentation of each item 
+	 * @param output the string that accumulated the string representation
+	 * of this BST
+	 */
 	private void postOrderPrint(AVLNode<E> tree, int level, StringBuilder output)
 	{
 		if (tree != null) {
@@ -321,10 +323,10 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 		private int height;
 		
 		public AVLNode ( E data ){
-			this(data, null, null);
+			this( data, null, null );
 		}
 		
-		public AVLNode ( E data, AVLNode<E> left, AVLNode<E> right){
+		public AVLNode ( E data, AVLNode<E> left, AVLNode<E> right ){
 			this.data = data;
 			this.left = left;
 			this.right = right;
@@ -338,12 +340,12 @@ public class AVLTree<E extends Comparable <E> > implements BSTInterface<E>{
 				this.height = 1 + left.height;
 			}
 			else{
-				this.height = 1 + Math.max(left.height, right.height);
+				this.height = 1 + Math.max( left.height, right.height );
 			}
 		}
 		
-		public int compareTo ( AVLNode <E> other){
-			return this.data.compareTo(other.data);
+		public int compareTo( AVLNode <E> other ){
+			return this.data.compareTo( other.data );
 		}
 		
 		public E getData(){
