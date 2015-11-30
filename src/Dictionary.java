@@ -35,29 +35,7 @@ public class Dictionary extends AVLTree<String> implements DictionaryInterface{
 			words.insert(word);
 		}
 	}
-
-	/**
-	 * Creates a new Dictionary object from this Dictionary object that 
-	 * contains words of a specified size.
-	 * @param size length of the words that should be included in the new 
-	 * Dictionary object
-	 * @return a new Dictionary object containing only the words of specified 
-	 * size
-	 */
-	public Dictionary getWordsBySize ( int size ) {
-		ArrayList<String> allWords = words.inOrderArray();
-		ArrayList<String> wordsBySize = new ArrayList<String>();
-
-		for ( int i = 0; i < allWords.size(); i++ ){
-			if( allWords.get(i).length() == size ){
-				wordsBySize.add(allWords.get(i));
-			}
-		}
-
-		return new Dictionary (wordsBySize);
-	}
-
-
+	
 	/**
 	 * 
 	 */
