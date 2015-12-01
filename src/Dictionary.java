@@ -39,6 +39,7 @@ public class Dictionary extends AVLTree<String> implements DictionaryInterface{
 	/**
 	 * Checks whether or not a word is in a Dictionary
 	 * Object
+	 * 
 	 * @param word the word to be looked for
 	 * @return boolean true if the word is in the Dictionary
 	 * false otherwise
@@ -52,6 +53,7 @@ public class Dictionary extends AVLTree<String> implements DictionaryInterface{
 	 * Dictionary
 	 * Utitlizes the recursive findPrefix(String prefix, AVLNode<String> node)
 	 * method
+	 * 
 	 * @param prefix the prefix to be looked for
 	 * @return a boolean value representing wether
 	 * or not the prefix was found true if yes false otherwise
@@ -63,6 +65,7 @@ public class Dictionary extends AVLTree<String> implements DictionaryInterface{
 	/**
 	 * This method recursively searches an AVLTree for
 	 * a given prefix. 
+	 * 
 	 * @param 
 	 * 	prefix The prefix to be looked for
 	 * 	node The node of the AVLTree to start the search
