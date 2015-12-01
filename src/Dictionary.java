@@ -13,7 +13,6 @@ public class Dictionary extends AVLTree<String> implements DictionaryInterface{
 	//actual storage for the words
 	private AVLTree<String> words;
 
-
 	/**
 	 * Creates an empty Dictionary object (no words).
 	 */
