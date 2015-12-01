@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-
 /**
- * This class implements a binary search tree.
+ * This class implements a AVL tree.
  * All of its methods are implemented recursively
  * @author Aaron Walker
  *
@@ -10,15 +8,26 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 	protected AVLNode<E> root;
 	protected int size;
 	
+	/**
+	 * Constructor
+	 * No parameters initializes an AVL tree
+	 * with a null root and size zero
+	 */
 	public AVLTree(){
 		this.root = null;
 		this.size = 0;
 	}
 	
+	/** Return size of the AVL tree */
 	public int getSize(){
 		return size;
 	}
 	
+	/** 
+	 * Return height of a node
+	 * Height is 0 if node is held by a 
+	 * leaf
+	 */
 	public int getHeight ( AVLNode<E> node ){
 		if ( node == null ){
 			return 0;
@@ -26,6 +35,16 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		return node.height;
 	}
 	
+	/**
+	 * Get the balance factor of a node i.e. the
+	 * differences in heights between the left/right
+	 * subtrees of a given node
+	 * 
+	 * @param node the node to check
+	 * @return the current balance of a node
+	 * must be between -1 and 1 to be a proper
+	 * AVL tree
+	 */
 	public int getBalance ( AVLNode<E> node ){
 		if ( node.right == null ){
 			return -node.height;
@@ -33,25 +52,41 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		if ( node.left == null ){
 			return node.height;
 		}
+		//subtract left subtree height from right subtree height
 		return node.right.height - node.left.height;
 	}
 	
+	/**
+	 * Rebalances the tree based on a left-left 
+	 * imbalance at a given node
+	 * 
+	 * @param node the node where the imbalance occurs
+	 * @return reference to the new root of the
+	 * now balanced subtree
+	 */
 	private AVLNode<E> leftRotate( AVLNode<E> node ){//deal with LL Imbalance
-		//temporary for rotation
 		AVLNode<E> subLeft = node.left;
-		//perform rotation
 		
+		//perform rotation
 		node.left = subLeft.right;
 		subLeft.right = node;
 		
+		//update heights
 		updateHeight( node );
 		updateHeight( subLeft );
 		
 		return subLeft; //new root
 	}
 	
+	/**
+	 * This rebalances a right right imbalance in a tree
+	 * at a given node
+	 * 
+	 * @param node the node where the imbalance occurs
+	 * @return a reference to the new root of the now
+	 * balanced subtree
+	 */
 	private AVLNode<E> rightRotate( AVLNode<E> node ){//deal with RR Imbalance
-		//temporary for rotation
 		AVLNode<E> subRight = node.right;
 		
 		//perform rotation
@@ -65,6 +100,15 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		return subRight; //new root
 	}
 	
+	/**
+	 * This method rebalances a tree with a 
+	 * left-right imbalance at a given node
+	 * 
+	 * @param node the node where the imbalance
+	 * occurs
+	 * @return reference to the new root of the now
+	 * balanced subtree
+	 */
 	private AVLNode<E> leftRightRotate( AVLNode<E> node ){
 		AVLNode<E> subLeft = node.left;
 		AVLNode<E> subLeftRight = subLeft.right;
@@ -81,6 +125,15 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		return subLeftRight;
 	}
 	
+	/**
+	 * This method reblanaces a tree based on
+	 * a right-left imbalance at a given node
+	 * 
+	 * @param node the node at which the imbalance
+	 * occurs
+	 * @return a reference to the root of the now
+	 * balanced subtree
+	 */
 	private AVLNode<E> rightLeftRotate( AVLNode<E> node ){
 		AVLNode<E> subRight = node.right;
 		AVLNode<E> subRightLeft = subRight.left;
@@ -97,6 +150,13 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		return subRightLeft;
 	}
 	
+	/**
+	 * This method adds an item to this
+	 * AVL tree
+	 * 
+	 * @param data the data to be added to 
+	 * the tree...unless its null
+	 */
 	public void insert ( E data ){
 		if( data != null ){
 			root = insert ( root, data );
@@ -105,23 +165,39 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		
 	}
 	
+	/**
+	 * Recursive method for adding an item to this 
+	 * AVL tree
+	 * 
+	 * @param node root of the tree in which the new
+	 * node will be added
+	 * @param data the data to be added 
+	 * @return new root of the tree with the data added
+	 */
 	private AVLNode<E> insert ( AVLNode<E> node, E data ){
 		if ( node == null ){
 			node = new AVLNode<E>( data, null, null );
 		}
+		//find where to add
 		else if ( data.compareTo(node.data) < 0 ){
 			node.left = insert ( node.left, data );
 		}
 		else{
 			node.right = insert ( node.right, data );
 		}
-		
+		//have to reblance
 		updateHeight( node );
 		node = balance( node );
 		return node;
 		
 	}
 	
+	/**
+	 * This method removes data from this AVL tree
+	 * unless the data cannot be found or is null
+	 * 
+	 * @param data the data to be removed
+	 */
 	public void remove ( E data ){
 		if( data != null ){
 			root = remove( data, root );
@@ -129,25 +205,39 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		}
 	}
 	
+	/**
+	 * This method recursively removes data from
+	 * this AVL tree
+	 * 
+	 * @param data the data to be removed
+	 * @param node the root of the tree from which
+	 * to remove the data 
+	 * @return the new root reference of the tree
+	 * after the data has been removed
+	 */
 	private AVLNode<E> remove( E data, AVLNode<E> node ){
 		if( node == null ){
-			;
+			; //do nothing if root is null
 		}
 		if( data.compareTo( node.data ) < 0 ){
 			node.left = remove( data, node.left );
+			//rebalance
 			updateHeight( node );
 			return balance( node );
 		}
 		else if( data.compareTo( node.data ) > 0 ){
 			node.right = remove( data, node.right );
+			//rebalance
 			updateHeight( node );
 			return balance( node );
 		}
+		//found data
 		else{
+			//node is leaf
 			if( node.left == null && node.right == null ){
 				return null;
 			}
-			
+			//only 1 child 
 			if( node.left == null ){
 				return node.right;
 			}
@@ -155,22 +245,34 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 			if( node.right == null ){
 				return node.left;
 			}
-			
+			//2 children can leave tree unbalanced
 			else{
+				//find the predecessor value (left subtree)
 				E predValue = getPredecessor( node.left );
+				//replace data of 'root' with predecessor value
 				node.data = predValue;
 				node.left = remove( predValue, node.left );
+				//rebalance
 				updateHeight( node );
 				return balance( node );
 			}
 		}
 
 	}
-
+	
+	/**
+	 * This method balances this AVL tree at the provided
+	 * node based on the four possible imbalances
+	 * 
+	 * @param node root of the subtree to rebalance
+	 * @return reference to the new root of now balanced
+	 * subtree
+	 */
 	private AVLNode<E> balance( AVLNode<E> node ){
-		
+		//imbalance on left subtree
 		if( getBalance(node) == -2 ){
 			AVLNode<E> t = tallerSub( node.left, node.right );
+			//single or double rotation
 			if( getBalance(t) <= 0 ){
 				node = leftRotate( node );
 			}
@@ -178,8 +280,10 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 				node = leftRightRotate( node );
 			}
 		}
+		//imbalance on right subtree
 		if( getBalance( node ) == 2){
 			AVLNode<E> t = tallerSub( node.left, node.right );
+			//single or double rotation
 			if( getBalance(t) >= 1 ){
 				node = rightRotate( node );
 			}
@@ -190,6 +294,14 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		return node;
 	}
 	
+	/**
+	 * This method compares the heights of two AVL
+	 * nodes and returns the taller one
+	 * 
+	 * @param left AVL node to be compared
+	 * @param right AVL node to be compared
+	 * @return reference to the taller of the two nodes
+	 */
 	private AVLNode<E> tallerSub( AVLNode<E> left, AVLNode<E> right ){
 		if( left == null ){
 			return right;
@@ -205,16 +317,25 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		}
 	}
 	
+	/**
+	 * This method changes the current 
+	 * height of a node
+	 * @param node the node to update
+	 */
 	private void updateHeight( AVLNode<E> node ){
+		//node is a leaf
 		if( node.left == null && node.right == null ){
 			node.height = 0;
 		}
+		//node is part of a right tree
 		else if( node.left == null ){
 			node.height = node.right.height + 1;
 		}
+		//node is part of a left tree
 		else if( node.right == null ){
 			node.height = node.left.height + 1;
 		}
+		//node has both left and right subtrees
 		else{
 			node.height = Math.max( node.left.height, node.right.height ) + 1;
 		}
@@ -268,6 +389,13 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		return s.toString();
 	}
 	
+	/**
+	 * This method gets the predecessor node of a passed
+	 * in node.
+	 * @param node the node to get the predecessor of
+	 * @return the value held by the passed in nodes
+	 * predecessor 
+	 */
 	private E getPredecessor( AVLNode<E> node ){
 		while( node.right != null ){
 			node = node.right;
@@ -275,14 +403,31 @@ public class AVLTree< E extends Comparable <E> > implements BSTInterface<E>{
 		return node.data;
 	}
 	
-	public boolean contains ( E data ){
-		if ( data != null ){
+	/**
+	 * Public wrapper method for the 
+	 * contains( E data, AVLNode<E> node) method below
+	 * 
+	 * @param data the data to be checked for
+	 * @return a boolean value representing the 
+	 * presence of the data in the AVL tree
+	 */
+	public boolean contains( E data ){
+		if( data != null ){
 			return contains( data, root);
 		}
 		return false;
 	}
 	
-	private boolean contains( E data, AVLNode<E> node){
+	/**
+	 * This method searches for a value in a 
+	 * passed in tree
+	 * @param data the value to search for
+	 * @param node the root of an AVL tree or 
+	 * subtree at which to start the search
+	 * @return boolean value representing the 
+	 * presence of the data in the AVL tree
+	 */
+	private boolean contains( E data, AVLNode<E> node ){
 		//should just be like a binary search
 		//reached end of tree and never found it
 		if( node == null ){
