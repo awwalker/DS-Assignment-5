@@ -22,3 +22,30 @@ The goal of this programming project is for you to master (or at least get pract
 * implementation of a generic binary search tree (or AVL tree)
 * extending existing classes
 * writing Java programs
+
+## The Program Input and output
+
+You should not change this part of the implementation.
+
+## Computational Task
+
+Once the user has entered the letters, the program displays all the words in the dictionary that can be formed as combinations of all the letters entered by the user.
+
+### Creating all Possible Words
+
+The task of creating possible words should be achieved recursively using the backtracking technique.
+The LetterBag class that performs this computation is provided for you and you should not be making any changes to it. Your Dictionary class need to provide all the tools required by this class to work properly.
+
+### Searching in the Dictionary
+
+In order to determine if a given sequence is a valid word in the dictionary, your program needs to perform searches. As before, you need to provide a Dictionary class that allows to search for particular words and for the prefixes to words.
+
+## Program Design
+
+Your program must contain at least four classes (some of them are provided):
+* BST <E> class (or AVL <E> class) that implements a binary search tree. All of its methods should be implemented recursively (adding, removing and searching). You will need to define your own generic node class for this BST <E> class.
+* Dictionary class that represents the collection of words read in from the input file (i.e, the dictionary used by the program). This class is responsible for performing queries in the dictionary. The Dictionary class should extend the BST <String> class (or AVL <String>). This means that words should be stored in a binary search tree, not an ArrayList.
+* LetterBag class to represent the letters entered by the user/player. This class is given and you should not make any changes to it.
+* FindWords class that is the runnable program containing the main() method. This class is given and you should not make any changes to it.
+
+ 
